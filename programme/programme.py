@@ -91,14 +91,14 @@ def calculExecution():
 	
 	global pb_hD
 	
-	system_filename = os.path.join(path,"programme","export_7_3_2.csv") #export from Simapro
+	system_filename = os.path.join(path,"programme","ecoinvent_v22.CSV") #export from Simapro
 	CF_filenames = {}
 	CF_filenames['IMPACT2002+'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
 	CF_filenames['IMPACT World midpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_MidPt_aggreges_v0.01_no water quality.csv")
 	CF_filenames['IMPACT World endpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_EndPt_aggreges_v0.01_no water quality.csv")
 	CF_filenames['Recipe midpoint'] = os.path.join(path,"programme","recipe.csv")
 	
-	CF_filenames['Ecodex'] = os.path.join(path,"programme","impact method ecodex.csv")
+	CF_filenames['EcodEX - 15/08/2013 - 5 indicators w/o metal tox'] = os.path.join(path,"programme","impact method ecodex.csv")
 	
 	infoFrame1=Frame(informationsFrame)
 	infoFrame1.pack()
@@ -290,7 +290,7 @@ if 1:
 	###Fin du choix du projet
 
 	###choix de la methode
-	impact_methodes=['Ecodex','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
+	impact_methodes=['EcodEX - 15/08/2013 - 5 indicators w/o metal tox','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
 
 	nameMethodFrame=Frame(principalFrame)
 	nameMethodFrame.pack()
