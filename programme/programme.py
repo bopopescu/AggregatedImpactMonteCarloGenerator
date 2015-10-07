@@ -93,7 +93,8 @@ def calculExecution():
 	
 	system_filename = os.path.join(path,"programme","ecoinvent_v22.CSV") #export from Simapro
 	CF_filenames = {}
-	CF_filenames['IMPACT2002+'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
+	CF_filenames['IMPACT 2002+'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
+	CF_filenames['IMPACT 2002+-dammages'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
 	CF_filenames['IMPACT World midpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_MidPt_aggreges_v0.01_no water quality.csv")
 	CF_filenames['IMPACT World endpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_EndPt_aggreges_v0.01_no water quality.csv")
 	CF_filenames['Recipe midpoint'] = os.path.join(path,"programme","recipe.csv")

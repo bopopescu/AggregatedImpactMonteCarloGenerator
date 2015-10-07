@@ -1,7 +1,9 @@
 def read_CF_export(reader, unit_converter, CF_categories, CF_units):
 	
+	version=""
+	
 	line = next(reader)
-	if line[0][1:10]=="SimaPro 8":
+	if 1:#line[0][1:10]=="SimaPro 8":
 		line = next(reader)
 		if line[0]=="{methods}":
 			while 1:

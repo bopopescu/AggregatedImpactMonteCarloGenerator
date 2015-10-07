@@ -62,11 +62,12 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
 	CF_units = {}
     
     
-    
-	filename = "impact method ecodex.csv"
+	filenames=["impact method ecodex.csv","IMPACT2002 update 2011.csv"]
+	filename=filenames[1]
 	reader = csv.reader(open(filename,'U'), delimiter=';')
-	(version, CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_export(reader, unit_converter, CF_categories, CF_units)
-	CF_matrices = build_CF_matrix(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
+	(version, CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units)
+	CF_matrices = build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
+	
 	
 	 
 	"""
@@ -93,11 +94,7 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category)
 	
-		filename = CF_filenames['IMPACT2002+']
-		reader = csv.reader(open(filename,'U'), delimiter=';')
-		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units)
-		CF_matrices = build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category)
-	
+
 	if impact_method == 'Recipe midpoint':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
@@ -112,11 +109,13 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
 	
 	"""
 	
-	if 0:
+	if 1:
 		print_EF_list(EF_list)
 		print_CFs(CF_matrices, EF_list, CF_categories)
 		print_UP_list(UP_list, UP_meta_info, 0)
-        
+    
+	print "ok"
+	raw_input()
     #adjusting the unit for infrastructures (they have been rescaled by 1e6)
 	for UP_name in UP_meta_info:
 		if UP_meta_info[UP_name]['Infrastructure'] == 'Yes':
