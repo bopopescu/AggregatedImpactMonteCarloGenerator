@@ -1,0 +1,36 @@
+{
+  "arch": "x86", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "Lib/site-packages/menuinst-1.0.4-py2.7.egg-info", 
+    "Lib/site-packages/menuinst/PythonApplet.icns", 
+    "Lib/site-packages/menuinst/__init__.py", 
+    "Lib/site-packages/menuinst/__init__.pyc", 
+    "Lib/site-packages/menuinst/_version.py", 
+    "Lib/site-packages/menuinst/_version.pyc", 
+    "Lib/site-packages/menuinst/csidl.py", 
+    "Lib/site-packages/menuinst/csidl.pyc", 
+    "Lib/site-packages/menuinst/darwin.py", 
+    "Lib/site-packages/menuinst/darwin.pyc", 
+    "Lib/site-packages/menuinst/freedesktop.py", 
+    "Lib/site-packages/menuinst/freedesktop.pyc", 
+    "Lib/site-packages/menuinst/linux.py", 
+    "Lib/site-packages/menuinst/linux.pyc", 
+    "Lib/site-packages/menuinst/utils.py", 
+    "Lib/site-packages/menuinst/utils.pyc", 
+    "Lib/site-packages/menuinst/win32.py", 
+    "Lib/site-packages/menuinst/win32.pyc", 
+    "Lib/site-packages/menuinst/winshortcut.pyd"
+  ], 
+  "license": "BDF", 
+  "name": "menuinst", 
+  "platform": "win", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "version": "1.0.4"
+}

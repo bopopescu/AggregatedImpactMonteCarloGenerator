@@ -1,0 +1,46 @@
+{
+  "arch": "x86", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "cryptography 0.5.3", 
+    "python 2.7*", 
+    "six"
+  ], 
+  "files": [
+    "Lib/site-packages/OpenSSL/SSL.py", 
+    "Lib/site-packages/OpenSSL/SSL.pyc", 
+    "Lib/site-packages/OpenSSL/__init__.py", 
+    "Lib/site-packages/OpenSSL/__init__.pyc", 
+    "Lib/site-packages/OpenSSL/_util.py", 
+    "Lib/site-packages/OpenSSL/_util.pyc", 
+    "Lib/site-packages/OpenSSL/crypto.py", 
+    "Lib/site-packages/OpenSSL/crypto.pyc", 
+    "Lib/site-packages/OpenSSL/rand.py", 
+    "Lib/site-packages/OpenSSL/rand.pyc", 
+    "Lib/site-packages/OpenSSL/test/__init__.py", 
+    "Lib/site-packages/OpenSSL/test/__init__.pyc", 
+    "Lib/site-packages/OpenSSL/test/test_crypto.py", 
+    "Lib/site-packages/OpenSSL/test/test_crypto.pyc", 
+    "Lib/site-packages/OpenSSL/test/test_rand.py", 
+    "Lib/site-packages/OpenSSL/test/test_rand.pyc", 
+    "Lib/site-packages/OpenSSL/test/test_ssl.py", 
+    "Lib/site-packages/OpenSSL/test/test_ssl.pyc", 
+    "Lib/site-packages/OpenSSL/test/util.py", 
+    "Lib/site-packages/OpenSSL/test/util.pyc", 
+    "Lib/site-packages/OpenSSL/tsafe.py", 
+    "Lib/site-packages/OpenSSL/tsafe.pyc", 
+    "Lib/site-packages/OpenSSL/version.py", 
+    "Lib/site-packages/OpenSSL/version.pyc", 
+    "Lib/site-packages/pyOpenSSL-0.14-py2.7.egg-info"
+  ], 
+  "license": "APL2", 
+  "name": "pyopenssl", 
+  "platform": "win", 
+  "requires": [
+    "cryptography 0.5.3", 
+    "python 2.7", 
+    "six 1.7.3"
+  ], 
+  "version": "0.14"
+}

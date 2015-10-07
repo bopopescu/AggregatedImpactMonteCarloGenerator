@@ -1,0 +1,16 @@
+{
+  "arch": "x86", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "files": [
+    "Lib/site-packages/decorator-3.4.0-py2.7.egg-info", 
+    "Lib/site-packages/decorator.py", 
+    "Lib/site-packages/decorator.pyc"
+  ], 
+  "name": "decorator", 
+  "platform": "win", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "version": "3.4.0"
+}

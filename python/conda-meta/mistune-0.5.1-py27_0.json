@@ -1,0 +1,20 @@
+{
+  "arch": "x86", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "Lib/site-packages/mistune-0.5.1-py2.7.egg-info", 
+    "Lib/site-packages/mistune.py", 
+    "Lib/site-packages/mistune.pyc"
+  ], 
+  "license": "BSD", 
+  "name": "mistune", 
+  "platform": "win", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "version": "0.5.1"
+}

@@ -1,0 +1,36 @@
+{
+  "arch": "x86", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "Lib/site-packages/concurrent/__init__.py", 
+    "Lib/site-packages/concurrent/__init__.pyc", 
+    "Lib/site-packages/concurrent/futures/__init__.py", 
+    "Lib/site-packages/concurrent/futures/__init__.pyc", 
+    "Lib/site-packages/concurrent/futures/_base.py", 
+    "Lib/site-packages/concurrent/futures/_base.pyc", 
+    "Lib/site-packages/concurrent/futures/_compat.py", 
+    "Lib/site-packages/concurrent/futures/_compat.pyc", 
+    "Lib/site-packages/concurrent/futures/process.py", 
+    "Lib/site-packages/concurrent/futures/process.pyc", 
+    "Lib/site-packages/concurrent/futures/thread.py", 
+    "Lib/site-packages/concurrent/futures/thread.pyc", 
+    "Lib/site-packages/futures-2.2.0-py2.7.egg-info", 
+    "Lib/site-packages/futures/__init__.py", 
+    "Lib/site-packages/futures/__init__.pyc", 
+    "Lib/site-packages/futures/process.py", 
+    "Lib/site-packages/futures/process.pyc", 
+    "Lib/site-packages/futures/thread.py", 
+    "Lib/site-packages/futures/thread.pyc"
+  ], 
+  "license": "BSD", 
+  "name": "futures", 
+  "platform": "win", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "version": "2.2.0"
+}

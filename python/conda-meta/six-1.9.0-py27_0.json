@@ -1,0 +1,20 @@
+{
+  "arch": "x86", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "Lib/site-packages/six-1.9.0-py2.7.egg-info", 
+    "Lib/site-packages/six.py", 
+    "Lib/site-packages/six.pyc"
+  ], 
+  "license": "MIT", 
+  "name": "six", 
+  "platform": "win", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "version": "1.9.0"
+}

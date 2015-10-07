@@ -1,0 +1,22 @@
+{
+  "arch": "x86", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "Lib/site-packages/setuptools-14.3-py2.7.egg", 
+    "Lib/site-packages/setuptools.pth", 
+    "Scripts/easy_install-script.py", 
+    "Scripts/easy_install.exe", 
+    "Scripts/easy_install.exe.manifest"
+  ], 
+  "license": "PSF or ZPL", 
+  "name": "setuptools", 
+  "platform": "win", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "version": "14.3"
+}

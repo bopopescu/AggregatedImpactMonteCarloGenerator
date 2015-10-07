@@ -1,0 +1,178 @@
+/*Now the CSS*/
+* {margin: 0; padding: 0;}
+
+body{
+	text-align:center;
+}
+
+.tree{
+	position:relative;
+	display:inline-block;
+	overflow:auto;
+	height:1000px;
+	padding-right:350px;
+}
+
+.tree ul{
+	padding-top:20px;
+	position:relative;
+	text-align:center;
+	list-style-type: none;
+	
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+.tree li {
+	position:relative;
+	margin:20px;
+	text-align:center;
+	display:table-cell;
+	padding: 20px 5px 0 5px;
+	
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+.tree li div:not(.fiche){
+	padding:auto;
+	display:inline-block;
+	vertical-align: top;
+}
+
+/*We will use ::before and ::after to draw the connectors*/
+
+.tree li::before, .tree li::after{
+	content: '';
+	z-index:-1;
+	position: absolute; top: 0; right: 50%;
+	border-top: 1px solid #ccc;
+	width: 50%; height: 30px;
+}
+.tree li::after{
+	right: auto; left: 50%;
+	border-left: 1px solid #ccc;
+}
+
+/*We need to remove left-right connectors from elements without 
+any siblings*/
+.tree li:only-child::after, .tree li:only-child::before {
+	display: none;
+}
+
+.origine::before, .origine::after{
+	display:none;
+}
+
+/*Remove space from the top of single children
+.tree li:only-child{ padding-top: 0;}*/
+.tree li:only-child::before{
+	content: '';
+	position: absolute; left: 50%;
+	border-left: 1px solid #ccc;
+	width: 0; height: 70px;
+}
+
+/*Remove left connector from first child and 
+right connector from last child*/
+.tree li:first-child::before, .tree li:last-child::after{
+	border: 0 none;
+}
+/*Adding back the vertical connector to the last nodes*/
+.tree li:last-child::before{
+	border-right: 1px solid #ccc;
+	border-radius: 0 5px 0 0;
+	-webkit-border-radius: 0 5px 0 0;
+	-moz-border-radius: 0 5px 0 0;
+}
+.tree li:first-child::after{
+	border-radius: 5px 0 0 0;
+	-webkit-border-radius: 5px 0 0 0;
+	-moz-border-radius: 5px 0 0 0;
+}
+
+/*Time to add downward connectors from parents*/
+.tree ul ul::before{
+	content: '';
+	position: absolute; top: 0; left: 50%;
+	border-left: 1px solid #ccc;
+	width: 0; height: 20px;
+}
+
+.tree li a{
+	overflow:hidden;
+	z-index:1;
+	text-decoration: none;
+	font-family: arial, verdana, tahoma;
+	font-size: 11px;
+	display: inline-block;
+	width:80px;
+	padding:5px;
+	border-radius:5px;
+}
+
+/*Connector styles on hover*/
+ul li::after, 
+ul li::before, 
+ul::before, 
+ul ul::before{
+border-color:  #94a0b4;
+}
+
+/*Thats all. I hope you enjoyed it.
+Thanks :)*/
+
+.nopruned{
+	background: #A4B8FF;
+}
+.pruned{
+	background: #FF5353;
+}
+
+.fiche{
+padding:10px;
+font-size:12px;
+display:none;
+float:left;
+position:absolute;
+z-index:10;
+width:400px;
+border-color:  #94a0b4;
+cursor:auto;
+border-radius:5px;
+}
+
+.fleche:hover{
+opacity:1;
+}
+
+.fleche{
+z-index:5;
+position:relative;
+top:7px;
+opacity:0.5;
+display:block;
+cursor:pointer;
+margin:-5px auto;
+width:20px;
+}
+
+.suite{
+display:none;
+}
+
+.cible{
+	cursor:pointer;
+}
+
+.exit{
+	float:right;
+	margin:2px;
+}
+
+h3{
+	font-size:13px;
+	margin:10px;
+}

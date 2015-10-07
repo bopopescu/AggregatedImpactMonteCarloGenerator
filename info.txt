@@ -1,0 +1,11 @@
+Temps d'inversion de la matrice technologique sans sparse : 31s
+Temps d'inversion de la matrice technologique avec csr_matrix : 362s
+Temps d'inversion de la matrice technologique avec csc_sparse : 342s
+Temps d'inversion de la matrice technologique avec lil_sparse : impossible d'inverser
+Temps de "solve" de la matrice technologique avec lil_sparse : impossible de "solver"
+Temps de "solve" de la matrice technologique avec csc_sparse : 330s
+Temps de "solve" de la matrice technologique avec csr_sparse : 354s
+
+solve pour le cas non corrélé
+ vérifier dans le cas déterministe que l'inversion donne les mêmes résultats que le "solve"
+vérifier que solve permet de ne pas conditionner la machine.
