@@ -1,4 +1,4 @@
-def read_CF_export(reader, unit_converter, CF_categories, CF_units):
+def read_CF_export(reader, unit_converter, CF_categories, CF_units, impact_method):
 	
 	version=""
 	
@@ -12,7 +12,7 @@ def read_CF_export(reader, unit_converter, CF_categories, CF_units):
 					if line[0]=="End":
 						break 
 					if line[0]=="Name":
-						impact_method=next(reader)[0]
+						name=next(reader)[0]
 						CF_categories[impact_method] = []
 						CF_units[impact_method] = []
 						EF_list_for_CF_global = []

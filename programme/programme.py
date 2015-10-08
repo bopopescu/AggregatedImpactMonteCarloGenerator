@@ -91,7 +91,7 @@ def calculExecution():
 	
 	global pb_hD
 	
-	system_filename = os.path.join(path,"programme","ecoinvent_v22.CSV") #export from Simapro
+	system_filename = os.path.join(path,"programme","..","ecoinvent_v31.CSV") #export from Simapro
 	CF_filenames = {}
 	CF_filenames['IMPACT 2002+'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
 	CF_filenames['IMPACT 2002+-dammages'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
@@ -99,8 +99,9 @@ def calculExecution():
 	CF_filenames['IMPACT World endpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_EndPt_aggreges_v0.01_no water quality.csv")
 	CF_filenames['Recipe midpoint'] = os.path.join(path,"programme","recipe.csv")
 	
-	CF_filenames['EcodEX - 15/08/2013 - 5 indicators w/o metal tox'] = os.path.join(path,"programme","impact method ecodex.csv")
+	CF_filenames['EcodEX'] = os.path.join(path,"programme","impact method ecodex.csv")
 	
+
 	infoFrame1=Frame(informationsFrame)
 	infoFrame1.pack()
 	Label(infoFrame1,text="Reading the database and constructing the matrices...").pack(side=LEFT)
@@ -291,15 +292,16 @@ if 1:
 	###Fin du choix du projet
 
 	###choix de la methode
-	impact_methodes=['EcodEX - 15/08/2013 - 5 indicators w/o metal tox','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
-
+	impact_methodes=['EcodEX','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
+	
+	impact_methodes=impact_methodes+[methode for methode in os.listdir(os.path.join(path,"programme")) if methode[-4:]==".csv" and methode[:6]=="method"]
 	nameMethodFrame=Frame(principalFrame)
 	nameMethodFrame.pack()
 
 	Label(nameMethodFrame,text="Method name : ").pack(side=LEFT)
 
 	methodName = StringVar()
-	methodNameList = ttk.Combobox(nameMethodFrame, width=20, textvariable=methodName)
+	methodNameList = ttk.Combobox(nameMethodFrame, width=50, textvariable=methodName)
 	methodNameList['values'] =tuple(impact_methodes)
 	methodNameList.current(0)
 	methodNameList.pack(side=LEFT)

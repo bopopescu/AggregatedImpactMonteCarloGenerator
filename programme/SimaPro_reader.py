@@ -60,62 +60,57 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
 	CF_matrices = {}
 	CF_categories = {}
 	CF_units = {}
-    
-    
-	filenames=["impact method ecodex.csv","IMPACT2002 update 2011.csv"]
-	filename=filenames[1]
-	reader = csv.reader(open(filename,'U'), delimiter=';')
-	(version, CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units)
-	CF_matrices = build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
-	
-	
 	 
-	"""
+
 	if impact_method == 'IMPACT World terrestrial acidification':
 		#for IW terrestrial acidification per country
 		filename = CF_filenames[impact_method]
 		CF = read_CF_IMPACT_World_terrestrial_acidification(filename)
 		CF_matrices = build_CF_matrix_World_terrestrial_acidification(CF, EF_list, CF_matrices)
 	
-	if impact_method == 'IMPACT World endpoint':
+	elif impact_method == 'IMPACT World endpoint':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT_World_endpoint(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix_IMPACT_World_endpoint(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category)
-	if impact_method == 'IMPACT World midpoint':
+	elif impact_method == 'IMPACT World midpoint':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT_World(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
 	
-	if impact_method == 'IMPACT2002+ midpoint' or impact_method == 'IMPACT2002+ endpoint'or impact_method == 'Climat Change - Impact2002+':
+	elif impact_method == 'IMPACT2002+ midpoint' or impact_method == 'IMPACT2002+ endpoint'or impact_method == 'Climat Change - Impact2002+':
 		filename = CF_filenames['IMPACT2002+']
 		reader = csv.reader(open(filename,'U'), delimiter=';')
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category)
 	
 
-	if impact_method == 'Recipe midpoint':
+	elif impact_method == 'Recipe midpoint':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_Recipe(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
 	
-	if impact_method == 'Ecodex':
+	elif impact_method == 'Ecodex':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
 		(version, CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_Ecodex(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
 	
-	"""
+	else:
+		filename=impact_method
+		reader = csv.reader(open(filename,'U'), delimiter=';')
+		(version, CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_export(reader, unit_converter, CF_categories, CF_units, impact_method)
+		CF_matrices = build_CF_matrix(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
 	
-	if 1:
+	
+	if 0:
 		print_EF_list(EF_list)
 		print_CFs(CF_matrices, EF_list, CF_categories)
 		print_UP_list(UP_list, UP_meta_info, 0)
     
-	print "ok"
-	raw_input()
+
     #adjusting the unit for infrastructures (they have been rescaled by 1e6)
 	for UP_name in UP_meta_info:
 		if UP_meta_info[UP_name]['Infrastructure'] == 'Yes':
