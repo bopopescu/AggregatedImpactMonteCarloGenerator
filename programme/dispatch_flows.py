@@ -2,7 +2,7 @@ def dispatch_flows(all_UP_info, UP_name, UP_list, EF_list,all_flow, A, B, uncert
                     EF_unit, unit_converter, infrastructure_rescale, UP_meta_info):
     from treat_elementary_flow_info import treat_elementary_flow_info
     from treat_economic_flow_info import treat_economic_flow_info
-
+	
     UP_scaling_factor = UP_meta_info[UP_name]['scaling factor'] #just a shortcut
     if UP_meta_info[UP_name]['Infrastructure'] == 'Yes':
         UP_scaling_factor = UP_scaling_factor * infrastructure_rescale #infrastructures are rescaled to improve precision

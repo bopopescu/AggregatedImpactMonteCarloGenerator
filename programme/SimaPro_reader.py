@@ -118,3 +118,11 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
     
     
 	return system_meta_info, UP_meta_info, UP_list, EF_list,all_flow, technology_matrix, intervention_matrix, CF_matrices, CF_categories, CF_units, EF_unit, unit_converter, infrastructure_rescale, uncertainty_info
+
+
+if __name__=="__main__":
+	system_filename = "ecoinvent_v22.CSV"
+	CF_filenames = {}
+	CF_filenames['EcodEX'] = "impact method ecodex.csv"
+	impact_method="EcodEx"
+	SimaPro_reader(system_filename, CF_filenames, impact_method)

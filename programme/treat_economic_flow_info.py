@@ -29,18 +29,19 @@ def treat_economic_flow_info(flow, column_number, UP_list, sign, A, UP_scaling_f
     
     #raising a warning if a process calls itself
     line_number = UP_list.index(UP_name)
+    '''
     if line_number == column_number:
-        print 'alert! UP is calling itself:'
-        print line_number
-        print UP_list[line_number]
-        print ''
-    
+        print 'alert! UP is calling itself:', 
+        print UP_list[line_number],
+        print "("+str(line_number)+")"
+    '''    
+        
     #adjusting the coefficient for unit consistency.  
     #Two conversions have to be made: one for the process calling, and one for the process being called
     coefficient = float(coefficient) * unit_converter[unit][1] / UP_scaling_factor * sign
     if distribution=="Normal":
 		spread1=float(spread1) * unit_converter[unit][1] / UP_scaling_factor
-    if UP_name.find('/I ') != -1: #if the process does NOT NOT contains the infrastructure chain of character, rescale it
+    if UP_name.find('/I ') != -1: #if the process does NOT contains the infrastructure chain of character, rescale it
         coefficient = coefficient * infrastructure_rescale
     try: #sometimes, a process is called several times.  In this case, the coefficient should be added to the existing one
         A[column_number][line_number] += coefficient
