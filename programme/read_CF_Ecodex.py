@@ -1,7 +1,7 @@
 def read_CF_Ecodex(reader, unit_converter, CF_categories, CF_units):
     
-	CF_categories['Ecodex'] = []
-	CF_units['Ecodex'] = []
+	CF_categories['EcodEx'] = []
+	CF_units['EcodEx'] = []
 	EF_list_for_CF_global = []
 	EF_list_for_CF_per_category = {} 
 	#a list per category is necessary for a reason that will become apparent when it's time to
@@ -18,9 +18,9 @@ def read_CF_Ecodex(reader, unit_converter, CF_categories, CF_units):
 					line=next(reader)
 					category = line[0]
 					unit = line[1]
-					CF_categories['Ecodex'].append(category)
-					CF_units['Ecodex'].append(unit)
-					matrix_line = CF_categories['Ecodex'].index(category) #each line of the H matrix is a category
+					CF_categories['EcodEx'].append(category)
+					CF_units['EcodEx'].append(unit)
+					matrix_line = CF_categories['EcodEx'].index(category) #each line of the H matrix is a category
 					EF_list_for_CF_per_category[category] = []
 					line=next(reader)
 					line=next(reader)

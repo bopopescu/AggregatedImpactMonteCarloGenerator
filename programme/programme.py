@@ -99,7 +99,7 @@ def calculExecution():
 	CF_filenames['IMPACT World endpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_EndPt_aggreges_v0.01_no water quality.csv")
 	CF_filenames['Recipe midpoint'] = os.path.join(path,"programme","recipe.csv")
 	
-	CF_filenames['EcodEX'] = os.path.join(path,"programme","impact method ecodex.csv")
+	CF_filenames['EcodEx'] = os.path.join(path,"programme","impact method ecodex.csv")
 	
 
 	infoFrame1=Frame(informationsFrame)
@@ -149,6 +149,8 @@ def calculExecution():
 	Label(infoFrame3,text="Calculating deterministic scores ...").pack(side=LEFT)
 	t0=time.time()
 	#inverse_technology_matrix=spsolve(technology_matrix, identity(technology_matrix.shape[0]))
+	print len(technology_matrix.todense())
+	raw_input()
 	inverse_technology_matrix = inv(technology_matrix.todense())
 	tinv=time.time()-t0
 	#print "temps d'inversion : "+str(tinv)
@@ -292,7 +294,7 @@ if 1:
 	###Fin du choix du projet
 
 	###choix de la methode
-	impact_methodes=['EcodEX','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
+	impact_methodes=['EcodEx','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
 	
 	impact_methodes=impact_methodes+[methode for methode in os.listdir(os.path.join(path,"programme")) if methode[-4:]==".csv" and methode[:6]=="method"]
 	nameMethodFrame=Frame(principalFrame)

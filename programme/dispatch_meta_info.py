@@ -1,5 +1,7 @@
 def dispatch_meta_info(all_UP_info, UP_meta_info, UP_list, unit_converter):
     from copy import deepcopy
+    import re
+    
     #the list of marker is different according to the type of UP.  
     #starting with the common markers
     list_markers = ['Category type', 'Process identifier', 'Type', 'Process name', 'Status', 'Time period', 'Geography', 
@@ -34,21 +36,17 @@ def dispatch_meta_info(all_UP_info, UP_meta_info, UP_list, unit_converter):
         elif marker == UP_name_marker: #catching the UP name
             line = all_UP_info.pop(0)
             UP_name = line[0]
-            #catching the country tag            
-            
+            #catching the country tag
             try:
-                UP_meta_info_transient['Country'] = UP_name.split('/')[1].split(' ')[0]
-            except IndexError:
-                UP_meta_info_transient['Country'] = UP_name.split('{')[-1].split('}')[0]
+                if UP_name.find("{")>1:
+                    UP_meta_info_transient['Country'] =UP_name[UP_name.find("{")+1:UP_name.find("}")]
+                else:
+                    UP_meta_info_transient['Country'] = UP_name.split('/')[-1].split(' ')[0]
             except IndexError:
                 UP_meta_info_transient['Country'] = 'NA'
            
-            if ['m3', 'MJ', '8,'].count(UP_meta_info_transient['Country']): #exceptions for country tag
-                UP_meta_info_transient['Country'] = UP_name.split('/')[1].split(' ')[0]
-           
-            print UP_meta_info_transient['Country'],
-            print UP_name
-            raw_input()
+            if ['I'].count(UP_meta_info_transient['Country']): #exceptions for country tag
+                UP_meta_info_transient['Country'] = UP_name.split('/')[-2].split(' ')[0]
                     
             #putting the first level of category type in a list
             UP_meta_info_transient['Category type'] = [UP_meta_info_transient['Category type']]

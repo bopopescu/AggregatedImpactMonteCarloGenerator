@@ -73,6 +73,7 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
 		reader = csv.reader(open(filename,'U'), delimiter=';')
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT_World_endpoint(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix_IMPACT_World_endpoint(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category)
+	
 	elif impact_method == 'IMPACT World midpoint':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
@@ -85,17 +86,16 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category)
 	
-
 	elif impact_method == 'Recipe midpoint':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
 		(CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_Recipe(reader, unit_converter, CF_categories, CF_units)
 		CF_matrices = build_CF_matrix(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
 	
-	elif impact_method == 'Ecodex':
+	elif impact_method == 'EcodEx':
 		filename = CF_filenames[impact_method]
 		reader = csv.reader(open(filename,'U'), delimiter=';')
-		(version, CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_Ecodex(reader, unit_converter, CF_categories, CF_units)
+		(version, CF_categories, CF_units, dammage_factors, H, EF_list_for_CF_global, EF_list_for_CF_per_category) = read_CF_export(reader, unit_converter, CF_categories, CF_units, impact_method)
 		CF_matrices = build_CF_matrix(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category, impact_method)
 	
 	else:
@@ -121,7 +121,7 @@ def SimaPro_reader(system_filename, CF_filenames, impact_method):
 
 
 if __name__=="__main__":
-	system_filename = "ecoinvent_v22.CSV"
+	system_filename = "../ecoinvent_v31.CSV"
 	CF_filenames = {}
 	CF_filenames['EcodEX'] = "impact method ecodex.csv"
 	impact_method="EcodEx"
