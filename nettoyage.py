@@ -3,8 +3,19 @@ import csv
 from numpy import loadtxt, concatenate, genfromtxt
 
 
+
 ncol=5
-ups=os.listdir(os.path.join("correlated_impacts"))
+processes=os.listdir(os.path.join("correlated_impacts"))
+print len(processes)
+for process in processes:
+	try:
+		int(process[0])
+	except:
+		print process
+		processes.remove(process)
+print len(processes)
+
+"""
 for upName in ups:
 	up=upName.strip("~")[:-4]
 	try:
@@ -29,3 +40,4 @@ for upName in ups:
 				1
 		if len(newline)==ncol:
 			nouveau.writerow(newline)
+"""

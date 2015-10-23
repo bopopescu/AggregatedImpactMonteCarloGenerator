@@ -1,4 +1,6 @@
 def read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units):
+    import csv
+    import os
     
     #the file contains the CF for midpoint and the factors to go from midpoint to endpoint
     #we can create 3 impact methods with it: midpoint, endpoint, and midpoint with endpoint units
@@ -40,6 +42,7 @@ def read_CF_IMPACT2002(reader, unit_converter, CF_categories, CF_units):
                                 EF_list_for_CF_global.append([compartment, EF, sub_compartment]) #add it
                             matrix_column = EF_list_for_CF_global.index([compartment, EF, sub_compartment]) #find the EF number in the list
                             H.append([matrix_line, matrix_column, float(CF.replace(',','.'))])
+                            
                 elif line[0] == 'Damage category': #fetching the factors to go from midpoint to endpoint
                     endpoint_category = line[1]
                     endpoint_unit=line[2]

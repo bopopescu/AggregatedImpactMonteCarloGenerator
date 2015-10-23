@@ -52,6 +52,18 @@ def selectProject():
 		newproject=False
 	else:
 		os.mkdir(path+projectName.get())
+		os.mkdir(os.path.join(path,project_name,"correlated_impacts"))
+		os.mkdir(os.path.join(path,project_name,"nocorrelated_impacts"))
+		os.mkdir(os.path.join(path,project_name,"trees"))
+		os.mkdir(os.path.join(path,project_name,"variance_covariance"))
+		shutil.copyfile(os.path.join(path,"programme","style.css"), os.path.join(path,project_name,"trees","style.css"))
+		shutil.copyfile(os.path.join(path,"programme","fleche_bas.png"), os.path.join(path,project_name,"trees","fleche_bas.png"))
+		shutil.copyfile(os.path.join(path,"programme","fleche_haut.png"), os.path.join(path,project_name,"trees","fleche_haut.png"))
+		shutil.copyfile(os.path.join(path,"programme","script.js"), os.path.join(path,project_name,"trees","script.js"))
+		shutil.copyfile(os.path.join(path,"programme","croix.png"), os.path.join(path,project_name,"trees","croix.png"))
+
+	shutil.copyfile(os.path.join(path,"programme","nettoyage.py"), os.path.join(path,projectName.get(),"nettoyage.py"))
+	
 	
 	Label(NameProjectFrame,text=projectName.get()).pack(side=LEFT)
 	
@@ -91,16 +103,7 @@ def calculExecution():
 	
 	global pb_hD
 	
-	system_filename = os.path.join(path,"programme","..","ecoinvent_v31.CSV") #export from Simapro
-	CF_filenames = {}
-	CF_filenames['IMPACT 2002+'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
-	CF_filenames['IMPACT 2002+-dammages'] = os.path.join(path,"programme","IMPACT2002 update 2011.csv") #export from Simapro
-	CF_filenames['IMPACT World midpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_MidPt_aggreges_v0.01_no water quality.csv")
-	CF_filenames['IMPACT World endpoint'] = os.path.join(path,"programme","IW+ 2012-09-05_Default_EndPt_aggreges_v0.01_no water quality.csv")
-	CF_filenames['Recipe midpoint'] = os.path.join(path,"programme","recipe.csv")
-	
-	CF_filenames['EcodEx'] = os.path.join(path,"programme","impact method ecodex.csv")
-	
+	system_filename = os.path.join(path,"programme","..","databases","ecoinvent_v22.CSV") #export from Simapro
 
 	infoFrame1=Frame(informationsFrame)
 	infoFrame1.pack()
@@ -109,20 +112,14 @@ def calculExecution():
 	
 	(system_meta_info, UP_meta_info, UP_list, EF_list,all_flow, technology_matrix, 
 		intervention_matrix, CF_matrices, CF_categories, CF_units, EF_unit, 
-		unit_converter, infrastructure_rescale, uncertainty_info) = SimaPro_reader(system_filename, CF_filenames, impact_method)
+		unit_converter, infrastructure_rescale, uncertainty_info) = SimaPro_reader(system_filename, impact_method)
 
 	Label(infoFrame1,text="Done").pack()
 
-	if impact_method=="Climat Change - Impact2002+":
-		CF_matrix = [CF_matrices["IMPACT2002+ endpoint"][0],CF_matrices["IMPACT2002+ endpoint"][0]]
-		CF_categories=[CF_categories["IMPACT2002+ endpoint"][0],CF_categories["IMPACT2002+ endpoint"][0]]
-		CF_units=[CF_units["IMPACT2002+ endpoint"][0],CF_units["IMPACT2002+ endpoint"][0]]
-		CF_categories_name=[ re.sub("\W","_",cat) for cat in CF_categories]
-	else:
-		CF_matrix = CF_matrices[impact_method]
-		CF_categories=CF_categories[impact_method]
-		CF_units=CF_units[impact_method]
-		CF_categories_name=[ re.sub("\W","_",cat) for cat in CF_categories]
+	CF_matrix = CF_matrices[impact_method]
+	CF_categories=CF_categories[impact_method]
+	CF_units=CF_units[impact_method]
+	CF_categories_name=[ re.sub("\W","_",cat) for cat in CF_categories]
 	
 	EF_by_number = {}
 	for (compartment, substance, subcompartment) in EF_list:
@@ -149,8 +146,6 @@ def calculExecution():
 	Label(infoFrame3,text="Calculating deterministic scores ...").pack(side=LEFT)
 	t0=time.time()
 	#inverse_technology_matrix=spsolve(technology_matrix, identity(technology_matrix.shape[0]))
-	print len(technology_matrix.todense())
-	raw_input()
 	inverse_technology_matrix = inv(technology_matrix.todense())
 	tinv=time.time()-t0
 	#print "temps d'inversion : "+str(tinv)
@@ -169,9 +164,17 @@ def calculExecution():
 		
 		pb_hD.pack()
 		
-		if os.path.isdir(os.path.join(path,project_name,"correlated_impacts"))==False: os.mkdir(os.path.join(path,project_name,"correlated_impacts"))
+		essai=0
+		while 1:
+			try:
+				os.mkdir(os.path.join(path,project_name,"correlated_impacts"+str(essai)))
+				break
+			except:
+				essai+=1
+			
+						
 		(variables_technologique, variables_intervention)=MC_correlated_preparation(technology_matrix, intervention_matrix, uncertainty_info['technology'], uncertainty_info['intervention'])
-		MC(variables_technologique, variables_intervention, CF_matrix, CF_categories_name, iterations, UP_list, "all", os.path.join(path,project_name,"correlated_impacts"), [], progress)
+		MC(variables_technologique, variables_intervention, CF_matrix, CF_categories_name, iterations, UP_list, "all", os.path.join(path,project_name,"correlated_impacts"+str(esai)), [], progress)
 		
 		infoFrame4=Frame(informationsFrame)
 		infoFrame4.pack()
@@ -186,7 +189,6 @@ def calculExecution():
 		
 		###Calculation of the cariance-covariance matrices
 
-		if os.path.isdir(os.path.join(path,project_name,"variance_covariance"))==False: os.mkdir(os.path.join(path,project_name,"variance_covariance"))
 		calcul_vcv(UP_list, impact_method, CF_categories_name, os.path.join(path,project_name))
 		
 		Label(infoFrame4,text="Done").pack()
@@ -195,6 +197,14 @@ def calculExecution():
 	if nocorrelatedMC.get():
 		
 		sigma_correlated, mu_correlated, sign_correlated=calcul_parameters(UP_list, os.path.join(path,project_name,"correlated_impacts"), len(CF_categories))
+		
+		essai=0
+		while 1:
+			try:
+				os.mkdir(os.path.join(path,project_name,"nocorrelated_impacts"+str(essai)))
+				break
+			except:
+				essai+=1
 		
 		###Monte-Carlo in the correlated case and storage of the matrices (laws'parameters)
 		Label(informationsFrame,text="Uncertainty analysis under a fully-uncorrelated assumption...").pack()
@@ -210,14 +220,6 @@ def calculExecution():
 		systems=[]
 		for proc in UP_list:
 			systems.append({proc:1})
-		if os.path.isdir(os.path.join(path,project_name,"nocorrelated_impacts"))==False: os.mkdir(os.path.join(path,project_name,"nocorrelated_impacts"))
-		if os.path.isdir(os.path.join(path,project_name,"trees"))==False: os.mkdir(os.path.join(path,project_name,"trees"))
-
-		shutil.copyfile(os.path.join(path,"programme","style.css"), os.path.join(path,project_name,"trees","style.css"))
-		shutil.copyfile(os.path.join(path,"programme","fleche_bas.png"), os.path.join(path,project_name,"trees","fleche_bas.png"))
-		shutil.copyfile(os.path.join(path,"programme","fleche_haut.png"), os.path.join(path,project_name,"trees","fleche_haut.png"))
-		shutil.copyfile(os.path.join(path,"programme","script.js"), os.path.join(path,project_name,"trees","script.js"))
-		shutil.copyfile(os.path.join(path,"programme","croix.png"), os.path.join(path,project_name,"trees","croix.png"))
 		
 		processRunned=Label(informationsFrame,text="")
 		processRunned.pack()
@@ -248,15 +250,14 @@ def calculExecution():
 			tree(UP_list_desag, UP_meta_info, impact_method, CF_categories, all_system_scores, all_unit_scores, CF_units, os.path.join(path,project_name,"trees"))
 
 			(variables_technologique, variables_intervention)=MC_nocorrelated_preparation(technology_matrix, intervention_matrix, uncertainty_info['technology'], uncertainty_info['intervention'], UP_list, UP_list_desag, mu_correlated, sign_correlated, sigma_correlated)
-			MC(variables_technologique, variables_intervention, CF_transformed, CF_categories_name, iterations, UP_list_desag, system_number, os.path.join(path,project_name,"nocorrelated_impacts"), systems, progress)
+			MC(variables_technologique, variables_intervention, CF_transformed, CF_categories_name, iterations, UP_list_desag, system_number, os.path.join(path,project_name,"nocorrelated_impacts"+str(essai)), systems, progress)
 			
 		infoFrame5=Frame(informationsFrame)
 		infoFrame5.pack()
 		Label(infoFrame5,text="Printing parameters ...").pack(side=LEFT)
 		
-		sigma_nocorrelated, mu_nocorrelated, sign_nocorrelated=calcul_parameters(UP_list[:-4], os.path.join(path,project_name,"nocorrelated_impacts"), len(CF_categories))
+		sigma_nocorrelated, mu_nocorrelated, sign_nocorrelated=calcul_parameters(UP_list[:-4], os.path.join(path,project_name,"correlated_impacts"), len(CF_categories))
 		
-
 		results_nocor = csv.writer(open(os.path.join(path,project_name,"Monte-Carlo_results_nocorrele.csv"), "wb"))
 		results_nocor.writerow(["index", "processus"]+["impact "+category for category in CF_categories]+["sign "+category for category in CF_categories]+["mu "+category for category in CF_categories]+["sigma "+category for category in CF_categories])
 		for up in range(len(UP_list)-4):
@@ -285,7 +286,7 @@ if 1:
 
 	projectName = StringVar()
 	projectNameList = ttk.Combobox(NameProjectFrame, width=20, textvariable=projectName)
-	projectNameList['values'] =tuple([proj for proj in os.listdir(path) if proj not in["programme","python", "run.bat"]])
+	projectNameList['values'] =tuple([proj for proj in os.listdir(path) if proj not in["databases","programme","python", "run.exe", "readme.doc"]])
 	projectNameList.current(0)
 	projectNameList.pack(side=LEFT)
 
@@ -294,7 +295,8 @@ if 1:
 	###Fin du choix du projet
 
 	###choix de la methode
-	impact_methodes=['EcodEx','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
+	impact_methodes = [impactName for impactName in os.listdir(os.path.join(path,"databases", "impactMethods")) if impactName[:11]<>"impact2002+" and impactName[:2]<>'IW']+["IMPACT2002+ midpoint", "IMPACT2002+ endpoint", 'IMPACT World midpoint', 'IMPACT World endpoint']
+	#impact_methodes=['EcodEx','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
 	
 	impact_methodes=impact_methodes+[methode for methode in os.listdir(os.path.join(path,"programme")) if methode[-4:]==".csv" and methode[:6]=="method"]
 	nameMethodFrame=Frame(principalFrame)

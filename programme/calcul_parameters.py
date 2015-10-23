@@ -9,7 +9,11 @@ def calcul_parameters(UP_list, path, nb_categories):
 	up_calc=os.listdir(path)
 	for up in range(len(UP_list)):
 		if str(up)+".csv" in up_calc:
-			data=loadtxt(open(os.path.join(path,str(up)+".csv"), "rb"), delimiter=",", dtype=float)
+			try:
+				data=loadtxt(open(os.path.join(path,str(up)+".csv"), "rb"), delimiter=",", dtype=float)
+			except:
+				print up
+				raw_input()
 			variance=var(data,0)
 			E=mean(data,0)
 			line_sigma=[]

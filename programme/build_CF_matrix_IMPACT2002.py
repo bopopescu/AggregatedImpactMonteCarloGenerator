@@ -1,7 +1,8 @@
 def build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF_global, EF_list, CF_matrices, EF_list_for_CF_per_category):
     from scipy.sparse import lil_matrix, find
     from copy import deepcopy
-    
+    import csv
+    import os
     #building a transient matrix (the columns correspond to the system set up by the impact method, NOT the one of ecoinvent)
     transient_CF = lil_matrix((len(CF_categories['IMPACT2002+ midpoint']), len(EF_list_for_CF_global)))
     for [matrix_line, matrix_column, CF] in H:
@@ -24,6 +25,7 @@ def build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF
                     column_number_CF = 'NA'
             if column_number_CF != 'NA':
                 CF_matrices['IMPACT2002+ midpoint'][matrix_line, column_number_EF] = transient_CF[matrix_line, column_number_CF]
+                
     del transient_CF
     
     #building the matrix for midpoint with endpoint unit
@@ -45,7 +47,6 @@ def build_CF_matrix_IMPACT2002(CF_categories, dammage_factors, H, EF_list_for_CF
             #start with a null line, and add all the relevant lines from CF_categories['IMPACT2002+ mid_end']
             CF_matrices['IMPACT2002+ endpoint'][matrix_line_endpoint, :] = (CF_matrices['IMPACT2002+ endpoint'][matrix_line_endpoint, :] + 
                                                                             CF_matrices['IMPACT2002+ mid_end'][matrix_line_midpoint, :])
-    
     del H, EF_list_for_CF_global, EF_list_for_CF_per_category, dammage_factors
     
     return CF_matrices
