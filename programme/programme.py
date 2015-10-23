@@ -110,7 +110,7 @@ def cleaning(up):
 	nouveau=csv.writer(open(os.path.join(path,project_name,"correlated_impacts",str(up)+".csv"), "ab"))
 	for essai in [ e for e in os.listdir(os.path.join(path,project_name)) if e[:18]=="correlated_impacts" and e<>"correlated_impacts"]:
 		tirage=loadtxt(os.path.join(path,project_name,essai,str(up)+".csv"),delimiter=",")
-		for row in tirage:
+		for row in tirage[:-1]:
 			nouveau.writerow([str(row[0]+lastIteration)]+list(row[1:]))
 		lastIteration+=tirage[-1,0]+1
 		os.remove(os.path.join(path,project_name,essai,str(up)+".csv"))
@@ -120,6 +120,8 @@ def cleaningAll():
 	pool = Pool()
 	asyncResult = pool.map_async(cleaning, xrange(number_process))	# on lance aussi cent milles operations
 	resultList = asyncResult.get()	# asyncResult.get() is a list of values
+	for essai in [ e for e in os.listdir(os.path.join(path,project_name)) if e[:18]=="correlated_impacts" and e<>"correlated_impacts"]:
+		os.remove(os.path.join(path,project_name,essai))
 
 def calcul():
 	t1=threading.Thread(target=calculExecution)
@@ -306,7 +308,7 @@ if 1:
 
 	fenetre.title('.....')#Title
 
-	principalFrame=Frame(fenetre, borderwidth=5, width=200)
+	principalFrame=Frame(fenetre, borderwidth=5, width=500)
 	principalFrame.pack()
 
 
@@ -420,9 +422,9 @@ if 1:
 	pb_hD = ttk.Progressbar(informationsFrame, length= 500, mode='determinate', variable=progress)
 
 	runButton=Button(principalFrame,text="Run", command=calcul)
-	runButton.pack()
+	runButton.pack(side=LEFT)
 	cleanButton=Button(principalFrame,text="Clean", command=cleaningAll)
-	cleanButton.pack()
+	cleanButton.pack(side=LEFT)
 
 	fenetre.mainloop()#run the interface
 
