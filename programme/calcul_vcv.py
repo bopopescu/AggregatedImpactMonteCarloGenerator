@@ -10,9 +10,10 @@ def calcul_vcv(UP_list, impact_method, CF_categories_name, path):
 			for up in range(len(UP_list)):
 				try:
 					data_up = loadtxt(os.path.join(path,"correlated_impacts",str(up)+".csv"),delimiter=",", usecols=(CF_categories_name.index(category),), dtype=float)
+					MAT.writerow(data_up)
 				except:
 					print up
-				MAT.writerow(data_up)
+				
 
 	for category in CF_categories_name:
 		#print "\rconstructions of variance-covariance matrix for "+category+"                    ",

@@ -62,7 +62,7 @@ def MC(variables_techno, variables_interv, CF, CF_categories_name, iterations, U
 			for sys in range(impact.shape[1]):
 				with open(os.path.join(path,str(sys)+".csv"), "ab") as fichier:
 					csv_results = csv.writer(fichier)
-					csv_results.writerow(impact[:,sys])
+					csv_results.writerow([k]+list(impact[:,sys]))
 			#print '\r   Progress of Monte-Carlo simulations : '+str(int(100*(k+1)/iterations))+"%  ",
 		
 		else:
@@ -72,5 +72,5 @@ def MC(variables_techno, variables_interv, CF, CF_categories_name, iterations, U
 			
 			with open(os.path.join(path,str(system_number)+".csv"), "ab") as fichier:
 					csv_results = csv.writer(fichier)
-					csv_results.writerow(impact)
+					csv_results.writerow([k]+impact)
 			#print "\r  system : "+str(system_number)+"/"+str(len(systems)-5)+", Progress of Monte-Carlo simulations : "+str(int(100*(k+1)/iterations))+"%      ",

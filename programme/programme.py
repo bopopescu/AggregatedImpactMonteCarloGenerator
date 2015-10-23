@@ -4,7 +4,7 @@ from print_matrices_informations import print_matrices_informations
 from scipy.linalg import inv
 from scipy.sparse import identity, lil_matrix
 from scipy.sparse.linalg import spsolve
-from numpy import matrix, log, sign, loadtxt
+from numpy import matrix, log, sign, loadtxt, genfromtxt
 from fix_inverse import fix_inverse
 from calculate_all_scores import calculate_all_scores
 from calcul_parameters import calcul_parameters
@@ -26,12 +26,14 @@ from Tkinter import *
 import ttk
 import time
 import threading
+from multiprocessing import Pool
 
 if os.getcwd()[-6:]=="python":
 	path=re.sub("python","",os.getcwd())#location of the courant folder
 else:
 	path=re.sub("programme","",os.getcwd())#location of the courant folder
 
+print "running..."
 def selectProject():
 	global project_name
 	project_name=projectName.get()
@@ -40,10 +42,15 @@ def selectProject():
 	if os.path.isdir(path+projectName.get()):
 		infos=loadtxt(os.path.join(path,project_name,"info.csv"), delimiter="||", dtype=str)
 		global impact_method
-		impact_method=str(infos[3][17:])
+		impact_method=str(infos[4][17:])
 		methodNameList.destroy()
 		selectMethodButton.destroy()
-		Label(nameMethodFrame,text=str(infos[3][17:])).pack(side=LEFT)	
+		Label(nameMethodFrame,text=str(infos[4][17:])).pack(side=LEFT)	
+		global database
+		database=str(infos[3][11:])
+		databaseNameList.destroy()
+		selectDatabaseButton.destroy()
+		Label(nameDatabaseFrame,text=str(infos[3][11:])).pack(side=LEFT)	
 		global disaggregation_criterion
 		disaggregation_criterion=float(infos[2][26:-1])/100
 		criterion.destroy()
@@ -73,6 +80,13 @@ def selectMethod():
 	Label(nameMethodFrame,text=methodName.get()).pack(side=LEFT)	
 	global impact_method
 	impact_method=methodName.get()
+
+def selectDatabase():
+	databaseNameList.destroy()
+	selectDatabaseButton.destroy()
+	Label(nameDatabaseFrame,text=databaseName.get()).pack(side=LEFT)	
+	global database
+	database=databaseName.get()
 	
 def selectIterationsNumber():
 	global iterations
@@ -88,6 +102,24 @@ def selectDisaggregationCriterion():
 	criterionButton.destroy()
 	Label(disaggregationCriterionFrame,text=str(disaggregation_criterion*100)+"%").pack(side=LEFT)
 
+def cleaning(up):
+	try:
+		lastIteration=genfromtxt(os.path.join(path,project_name,"correlated_impacts",str(up)+".csv"), delimiter=",", usecols = (0))[-1]
+	except:
+		lastIteration=0
+	nouveau=csv.writer(open(os.path.join(path,project_name,"correlated_impacts",str(up)+".csv"), "ab"))
+	for essai in [ e for e in os.listdir(os.path.join(path,project_name)) if e[:18]=="correlated_impacts" and e<>"correlated_impacts"]:
+		tirage=loadtxt(os.path.join(path,project_name,essai,str(up)+".csv"),delimiter=",")
+		for row in tirage:
+			nouveau.writerow([str(row[0]+lastIteration)]+list(row[1:]))
+		lastIteration+=tirage[-1,0]+1
+		os.remove(os.path.join(path,project_name,essai,str(up)+".csv"))
+
+def cleaningAll():
+	number_process=len(loadtxt(os.path.join(path,project_name,"info.csv"), delimiter="|", dtype=str)[24].split(","))
+	pool = Pool()
+	asyncResult = pool.map_async(cleaning, xrange(number_process))	# on lance aussi cent milles operations
+	resultList = asyncResult.get()	# asyncResult.get() is a list of values
 
 def calcul():
 	t1=threading.Thread(target=calculExecution)
@@ -103,7 +135,7 @@ def calculExecution():
 	
 	global pb_hD
 	
-	system_filename = os.path.join(path,"programme","..","databases","ecoinvent_v22.CSV") #export from Simapro
+	system_filename = os.path.join(path,"programme","..","databases",database) #export from Simapro
 
 	infoFrame1=Frame(informationsFrame)
 	infoFrame1.pack()
@@ -137,7 +169,7 @@ def calculExecution():
 	Label(infoFrame2,text="Done").pack()
 
 	
-	print_results(path+project_name, project_name, UP_list, EF_list, impact_method, CF_categories, CF_units, iterations, disaggregation_criterion, uncertainty_info, CF_matrix)
+	print_results(path+project_name, project_name, UP_list, EF_list, database, impact_method, CF_categories, CF_units, iterations, disaggregation_criterion, uncertainty_info, CF_matrix)
 
 
 	###Calculation of the determinists scores
@@ -174,7 +206,7 @@ def calculExecution():
 			
 						
 		(variables_technologique, variables_intervention)=MC_correlated_preparation(technology_matrix, intervention_matrix, uncertainty_info['technology'], uncertainty_info['intervention'])
-		MC(variables_technologique, variables_intervention, CF_matrix, CF_categories_name, iterations, UP_list, "all", os.path.join(path,project_name,"correlated_impacts"+str(esai)), [], progress)
+		MC(variables_technologique, variables_intervention, CF_matrix, CF_categories_name, iterations, UP_list, "all", os.path.join(path,project_name,"correlated_impacts"+str(essai)), [], progress)
 		
 		infoFrame4=Frame(informationsFrame)
 		infoFrame4.pack()
@@ -224,7 +256,7 @@ def calculExecution():
 		processRunned=Label(informationsFrame,text="")
 		processRunned.pack()
 		
-		for system_number in range(nocorrBegin.get(),nocorrEnd.get()): #disaggregation for every system
+		for system_number in range(nocorrBegin.get(),max(nocorrEnd.get(),len(UP_list)-4)): #disaggregation for every system
 			
 			processRunned.config(text="Process "+str(system_number))
 			pb_hD.pack()
@@ -296,13 +328,17 @@ if 1:
 
 	###choix de la methode
 	impact_methodes = [impactName for impactName in os.listdir(os.path.join(path,"databases", "impactMethods")) if impactName[:11]<>"impact2002+" and impactName[:2]<>'IW']+["IMPACT2002+ midpoint", "IMPACT2002+ endpoint", 'IMPACT World midpoint', 'IMPACT World endpoint']
+	databases = [db for db in os.listdir(os.path.join(path,"databases"))]
 	#impact_methodes=['EcodEx','IMPACT2002+ midpoint', 'IMPACT2002+ endpoint', 'Climat Change - Impact2002+', 'IMPACT World midpoint', 'IMPACT World endpoint', 'Recipe midpoint']
 	
-	impact_methodes=impact_methodes+[methode for methode in os.listdir(os.path.join(path,"programme")) if methode[-4:]==".csv" and methode[:6]=="method"]
 	nameMethodFrame=Frame(principalFrame)
 	nameMethodFrame.pack()
 
-	Label(nameMethodFrame,text="Method name : ").pack(side=LEFT)
+	nameDatabaseFrame=Frame(principalFrame)
+	nameDatabaseFrame.pack()
+
+	Label(nameMethodFrame,text="Impact method : ").pack(side=LEFT)
+	Label(nameDatabaseFrame,text="Database : ").pack(side=LEFT)
 
 	methodName = StringVar()
 	methodNameList = ttk.Combobox(nameMethodFrame, width=50, textvariable=methodName)
@@ -310,8 +346,16 @@ if 1:
 	methodNameList.current(0)
 	methodNameList.pack(side=LEFT)
 
+	databaseName = StringVar()
+	databaseNameList = ttk.Combobox(nameDatabaseFrame, width=50, textvariable=databaseName)
+	databaseNameList['values'] =tuple(databases)
+	databaseNameList.current(0)
+	databaseNameList.pack(side=LEFT)
+
 	selectMethodButton=Button(nameMethodFrame, text="select", command=selectMethod)
 	selectMethodButton.pack()
+	selectDatabaseButton=Button(nameDatabaseFrame, text="select", command=selectDatabase)
+	selectDatabaseButton.pack()
 	###Fin choix methode
 
 	###choix du nombre d'iterations
@@ -366,7 +410,6 @@ if 1:
 	Entry(nocorrIntervalFrame,width=4, textvariable=nocorrBegin).pack(side=LEFT)
 	Label(nocorrIntervalFrame,text="->").pack(side=LEFT)
 	Entry(nocorrIntervalFrame,width=4, textvariable=nocorrEnd).pack(side=LEFT)
-	Label(nocorrIntervalFrame,text="(max : 4164)").pack(side=LEFT)
 	###Fin choix du nombre d'iterations
 
 	###Informations
@@ -378,6 +421,8 @@ if 1:
 
 	runButton=Button(principalFrame,text="Run", command=calcul)
 	runButton.pack()
+	cleanButton=Button(principalFrame,text="Clean", command=cleaningAll)
+	cleanButton.pack()
 
 	fenetre.mainloop()#run the interface
 
